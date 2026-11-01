@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d2e20">
+  <title>Mô Saboaria — Gerador de Rótulos</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- HEADER MOBILE APPLE STYLE -->
+  <div class="mobile-header">
+    <div class="brand-mini">
+      <div class="brand-mark">🌿</div>
+      <div><strong>Mô Saboaria</strong><small>Studio de Rótulos</small></div>
+    </div>
+    <button class="menu-toggle-btn" id="menu-toggle" aria-label="Menu">☰</button>
+  </div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🌿</div>
+      <div>
+        <strong>Mô Saboaria</strong>
+        <small>DESIGN SYSTEM</small>
+      </div>
+      <button class="close-sidebar-btn" id="close-sidebar">✕</button>
+    </div>
+    <nav>
+      <button class="nav-item active" data-tab="cadastro"><span>✦</span> Novo Rótulo</button>
+      <button class="nav-item" data-tab="repositorio"><span>▤</span> Repositório</button>
+      <button class="nav-item" data-tab="gerados"><span>▧</span> Gerador PDF</button>
+      <button class="nav-item" data-tab="backup"><span>⇅</span> Backup & Dados</button>
+    </nav>
+    <div class="sidebar-note">
+      <span class="status-dot"></span> Sincronizado localmente com segurança.
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">MÔ SABOARIA • WORKSPACE</p>
+        <h1 id="page-title">Cadastro de rótulo</h1>
+      </div>
+      <div class="top-actions">
+        <span class="pill">Padrão: 6,6 × 4,1 cm</span>
+        <button class="button primary" id="new-label">＋ Novo Rótulo</button>
+      </div>
+    </header>
+
+    <!-- ABA 1: CADASTRO -->
+    <section class="tab-panel active" id="tab-cadastro">
+      <div class="intro">
+        <div>
+          <h2>Informações do Sabonete</h2>
+          <p>Configuração estruturada com os padrões institucionais da Mô Saboaria.</p>
+        </div>
+        <div class="step">01 <span>/ 04</span></div>
+      </div>
+      
+      <form id="label-form">
+        <input type="hidden" id="label-id">
+        <input type="hidden" id="logoUrl">
+        
+        <div class="form-section">
+          <div class="section-heading">
+            <span class="section-icon">✦</span>
+            <div>
+              <h3>Identificação Visual & Logomarca</h3>
+              <p>Envie o arquivo do seu logo oficial e defina o nome comercial do sabonete.</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label class="wide">Logomarca do Ateliê (Recomendado: PNG com fundo transparente)
+              <div class="file-input-group">
+                <input type="file" id="logo-file" accept="image/*">
+                <button type="button" class="button ghost" id="remove-logo-btn">Remover Logo</button>
+              </div>
+              <div id="logo-preview-wrap" style="display:none; align-items:center; gap:12px; margin-top:10px;">
+                <img id="logo-preview-img" alt="Logo preview">
+                <small style="color:var(--text-secondary);">Logomarca aplicada com sucesso</small>
+              </div>
+            </label>
+            <label class="wide">Nome do Sabonete *<input id="nome" required placeholder="Ex.: Elixir de Calmaria"></label>
+            <label>Tipo de Produto<input id="tipo" value="Sabonete artesanal" placeholder="Sabonete artesanal"></label>
+            <label>Peso Líquido<input id="peso" value="100g" placeholder="Ex.: 100g"></label>
+            <label class="wide">Destaque / Ingredientes em Evidência<input id="destaque" placeholder="Ex.: Lavanda e Argila Branca"></label>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <div class="section-heading">
+            <span class="section-icon">❋</span>
+            <div>
+              <h3>Composição e Instruções</h3>
+              <p>Textos institucionais refinados para a experiência do cliente.</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label class="wide">Descrição / Apresentação<textarea id="descricao" rows="3">Elaborado artesanalmente com ingredientes selecionados, proporciona uma limpeza suave, cuidado especial com a pele e um agradável sensação de hidratação e bem-estar. Um toque de carinho e delicadeza em cada banho.</textarea></label>
+            <label class="wide">Composição *<textarea id="composicao" rows="2" required placeholder="Base glicerinada, extrato natural..."></textarea></label>
+            <label class="wide">Modo de Usar *<textarea id="modo" rows="2" required>Aplique o sabonete sobre a pele úmida, massageando suavemente até formar espuma. Em seguida, enxáge abundantemente com água.</textarea></label>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <div class="section-heading">
+            <span class="section-icon">⚑</span>
+            <div>
+              <h3>Advertências e Validade</h3>
+              <p>Informações de segurança e lote.</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label class="wide">Atenção / Advertências<textarea id="atencao" rows="3">USO EXTERNO. Mantenha fora do alcance de crianças. Não utilize sobe a pele ferida ou irritada. Evite contato com os olhos. Em caso de contato, enxágue abundantemente com água. Em caso de irritação, suspenda o uso.</textarea></label>
+            <label>Data de Fabricação<input id="fabricacao" placeholder="MM/AAAA"></label>
+            <label>Data de Validade<input id="validade" placeholder="MM/AAAA"></label>
+          </div>
+        </div>
+
+        <!-- Campos institucionais fixos -->
+        <div style="display:none;">
+          <input id="telefone" value="(31) 9 8885-2567">
+          <input id="instagram" value="@mosaboaria">
+          <input id="email" value="mosaboariaartesanal@gmail.com">
+          <textarea id="endereco">Contagem/MG - Brasil</textarea>
+          <input id="marca" value="Mô Saboaria">
+        </div>
+        
+        <div class="form-footer">
+          <span class="muted">Campos obrigatórios marcados com asterisco (*).</span>
+          <div class="footer-buttons">
+            <button type="button" class="button ghost" id="clear-form">Limpar</button>
+            <button class="button primary" type="submit">Salvar Rótulo <span>→</span></button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- ABA 2: REPOSITÓRIO -->
+    <section class="tab-panel" id="tab-repositorio">
+      <div class="intro">
+        <div><h2>Repositório de Rótulos</h2><p>Gerencie, edite e organize suas criações.</p></div>
+        <div class="step" id="repo-count">00 <span>rótulos</span></div>
+      </div>
+      <div class="toolbar">
+        <div class="search-wrap"><span>🔍</span><input id="repo-search" placeholder="Buscar por nome do sabonete..."></div>
+        <select id="repo-sort"><option value="recent">Mais recentes</option><option value="az">Nome (A–Z)</option><option value="za">Nome (Z–A)</option></select>
+      </div>
+      <div class="label-grid" id="repo-grid"></div>
+    </section>
+
+    <!-- ABA 3: GERAR PDF -->
+    <section class="tab-panel" id="tab-gerados">
+      <div class="intro">
+        <div><h2>Gerador de PDF Apple-Grade</h2><p>Crie lotes únicos, variados ou personalizados para impressão em folhas A4.</p></div>
+        <div class="step">03 <span>/ 04</span></div>
+      </div>
+      <div class="print-layout">
+        <div class="print-card">
+          <div class="section-heading">
+            <span class="section-icon">▧</span>
+            <div><h3>Parâmetros de Impressão</h3></div>
+          </div>
+          
+          <label>Modo de Impressão
+            <select id="print-mode">
+              <option value="single">Rótulo Único Repetido</option>
+              <option value="mixed">Variedade Automática (Ciclo Completo)</option>
+              <option value="custom_batch">Lote Personalizado (Quantidades por Rótulo)</option>
+            </select>
+          </label>
+
+          <label id="single-select-wrap">Selecionar o Rótulo
+            <select id="print-select"><option value="">Selecione um sabonete...</option></select>
+          </label>
+
+          <div id="custom-batch-wrap" style="display:none; margin: 15px 0;">
+            <label style="margin-bottom:8px; font-weight:600; color:var(--text-primary);">Defina a quantidade de cada rótulo:</label>
+            <div id="custom-batch-list" style="max-height: 220px; overflow-y: auto; border:1px solid var(--border); border-radius:12px; padding:12px; background:var(--surface-subtle); display:flex; flex-direction:column; gap:8px;">
+            </div>
+            <small style="display:block; margin-top:8px; color:var(--text-secondary);">Total de rótulos no lote: <strong id="custom-batch-total">0</strong></small>
+          </div>
+
+          <div class="dimension-controls">
+            <label>Largura (cm)<input id="label-width" type="number" step="0.1" value="6.6"></label>
+            <label>Altura (cm)<input id="label-height" type="number" step="0.1" value="4.1"></label>
+          </div>
+
+          <div class="size-summary">
+            <div><span>Rótulo</span><strong id="summary-dim">6,6 × 4,1 cm</strong></div>
+            <div><span>Papel</span><strong>A4 Retrato</strong></div>
+            <div><span>Layout</span><strong>Grade Otimizada</strong></div>
+          </div>
+
+          <label id="pages-select-wrap">Quantidade de Folhas A4 
+            <select id="print-pages">
+              <option value="1">1 folha A4</option>
+              <option value="2">2 folhas A4</option>
+              <option value="3">3 folhas A4</option>
+              <option value="5">5 folhas A4</option>
+              <option value="10">10 folhas A4</option>
+            </select>
+          </label>
+
+          <button class="button primary full" id="generate-pdf">↓ Gerar & Baixar PDF em Alta Resolução</button>
+        </div>
+
+        <div class="preview-card">
+          <div class="preview-head">
+            <div><h3>Pré-visualização em Tempo Real</h3></div>
+            <span class="preview-tag" id="preview-size-tag">6,6 × 4,1 cm</span>
+          </div>
+          <div id="label-preview" class="label-preview empty-preview">Selecione um rótulo para visualizar</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 4: BACKUP -->
+    <section class="tab-panel" id="tab-backup">
+      <div class="intro">
+        <div><h2>Backup e Sincronização</h2><p>Mantenha seus dados seguros exportando e importando arquivos JSON.</p></div>
+        <div class="step">04 <span>/ 04</span></div>
+      </div>
+      <div class="backup-grid">
+        <article class="backup-card">
+          <div class="backup-icon">⇧</div>
+          <h3>Exportar Cadastros</h3>
+          <p style="color:var(--text-secondary); font-size:12px; margin-bottom:16px;">Baixe uma cópia de segurança de todos os seus rótulos cadastrados.</p>
+          <button class="button primary" id="export-json">Exportar JSON</button>
+        </article>
+        <article class="backup-card">
+          <div class="backup-icon">⇩</div>
+          <h3>Importar Cadastros</h3>
+          <p style="color:var(--text-secondary); font-size:12px; margin-bottom:16px;">Restaure seus rótulos através de um arquivo de backup prévio.</p>
+          <label class="button ghost file-button" style="cursor:pointer; text-align:center;">
+            Escolher Arquivo JSON
+            <input type="file" id="import-json" accept=".json" style="display:none;">
+          </label>
+        </article>
+      </div>
+    </section>
+
+    <footer>MÔ SABOARIA ARTESANAL <span>•</span> DESIGN SYSTEM APPLE-INSPIRED</footer>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
